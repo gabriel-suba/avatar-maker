@@ -42,7 +42,7 @@ a {
 .maker {
 	display: flex;
 	gap: 2rem;
-	padding: 1rem;
+	padding: 1.5rem;
 	background-color: var(--neutral-white);
 	border-radius: 0.33rem;
 	box-shadow: 6px 8px 22px 0px rgba(105,105,105,0.86);
@@ -62,7 +62,7 @@ a {
 
 .left .links {
 	display: flex;
-	gap: 2rem;
+	gap: 1rem;
 }
 
 .left .links > div {
@@ -90,6 +90,7 @@ a {
 
 .sprites {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 1rem;
 
 	margin-bottom: 1rem;
@@ -106,12 +107,17 @@ a {
 	cursor: pointer;
 }
 
+.sprite img {
+	pointer-events: none;
+}
+
 .sprite:hover {
 	transform: scale(1.1);
 }
 
 .color-options {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 1rem;
 
 	margin-bottom: 1rem;
@@ -151,6 +157,12 @@ a {
 	background-color: #f39530;
 }
 
+.features {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.2rem;
+}
+
 label {
 	font-weight: 600;
 }
@@ -162,6 +174,7 @@ select {
 	border: 1px solid var(--neutral-black);
 	border-radius: 0.33rem;
 
+
 	font-size: 1.125rem;
 
 	cursor: pointer;
@@ -170,5 +183,18 @@ select {
 .form-group {
 	display: flex;
 	flex-direction: column;
-	gap: 0.22rem;
+}
+
+.avatar-output, .avatar-output img {
+	border-radius: 0.66rem;
+}
+
+@media screen and (max-width: 775px) {
+	.maker {
+		flex-direction: column;
+	}
+
+	.maker .left {
+		border: none;
+	}
 }

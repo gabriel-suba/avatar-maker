@@ -1,23 +1,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/anchor-has-content */
 import { useEffect, useState } from 'react';
-import { adventurer } from './spriteFactory';
+import { bigSmile, openPeeps } from './spriteFactory';
 import './style.css'
 
-// TODO: ADD OTHER SPRITES OPTION
-
 function App() {
+  const diceBearURL = 'https://avatars.dicebear.com/api/'
+  const [selectedSprite, setSelectedSprite] = useState(bigSmile)
   const [selected, setSelected] = useState({})
   const [avatarUrl, setAvatarUrl] = useState('')
-  const [url, setUrl] = useState('https://avatars.dicebear.com/api/adventurer/')
+  const [sprite, setSprite] = useState('big-smile/')
   const [seed, setSeed] = useState('soojin.svg?')
   const [bgColor, setBgColor] = useState('')
   const [feature, setFeature] = useState([])
   
   useEffect(() => {
     function handleBuildQuery() {
-      const sample = buildFeatureQuery(feature).join("")
-      const query = url.concat(seed).concat(bgColor).concat(sample)
+      const featureQuery = buildFeatureQuery(feature).join("")
+      const query = diceBearURL.concat(sprite).concat(seed).concat(bgColor).concat(featureQuery)
   
       setAvatarUrl(query)
     }
@@ -25,7 +25,7 @@ function App() {
     if (feature) {
       handleBuildQuery()
     }
-  }, [feature, bgColor, seed])
+  }, [sprite, seed, bgColor, feature])
 
   function buildFeatureQuery(arr) {
     const query = [...arr]
@@ -50,7 +50,18 @@ function App() {
 
   function handleRandomSeed() {
     const random = Math.floor(Math.random() * 1000)
+    setFeature([])
     setSeed(`${random}.svg?`)
+  }
+
+  function handleChangeSprite(e) {
+    const { target: { dataset: { sprite } } } = e
+    
+    const toChange = sprite === 'big-smile' ? [...bigSmile] : [...openPeeps]
+
+    setSelectedSprite(toChange)
+    setFeature([])
+    setSprite(`${sprite}/`)
   }
 
   function handleSelect(e) {
@@ -62,8 +73,8 @@ function App() {
       temp.push(name)
       temp.push(value)
 
-      if (name === 'accessoires') {
-        temp.push('accessoiresProbability')
+      if (name === 'accessories') {
+        temp.push('accessoriesProbability')
         temp.push('100')
       }
 
@@ -72,8 +83,8 @@ function App() {
       return
     }
 
-    if (name === 'accessoires' && value === 'none') {
-      let idx = temp.indexOf('accessoires')
+    if (name === 'accessories' && value === 'none') {
+      let idx = temp.indexOf('accessories')
 
       temp.splice(idx, 4)
 
@@ -94,14 +105,13 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <h1>AVATAR MAKER</h1>
         <div className="maker">
           <div className="left">
             <div className="avatar-output">
               <img width={300} src={avatarUrl} alt="an icon" />
             </div>
             <div className="links">
-              <div>Download SVG</div>
+              <div><a href={avatarUrl} download>Download SVG</a></div>
               <div onClick={handleRandomSeed}>Random</div>
             </div>
           </div>
@@ -110,17 +120,11 @@ function App() {
 
             <h3>Choose a sprite</h3>
             <div className="sprites">
-              <div className="sprite"> {/** adventurers */}
-                <img src="https://avatars.dicebear.com/api/adventurer/5.svg?background=%235bccf6" alt="an icon" />
+              <div onClick={handleChangeSprite} data-sprite="big-smile" className="sprite"> {/** adventurers */}
+                <img src="https://avatars.dicebear.com/api/big-smile/10.svg?background=%235bccf6" alt="an icon" />
               </div>
-              <div className="sprite"> {/** big smile */}
-                <img src="https://avatars.dicebear.com/api/big-smile/5.svg?background=%235bccf6" alt="an icon" />
-              </div>
-              <div className="sprite"> {/** miniavs */}
-                <img src="https://avatars.dicebear.com/api/miniavs/5.svg?background=%235bccf6" alt="an icon" />
-              </div>
-              <div className="sprite"> {/** open peeps */}
-                <img src="https://avatars.dicebear.com/api/open-peeps/5.svg?background=%235bccf6" alt="an icon" />
+              <div onClick={handleChangeSprite} data-sprite="open-peeps" className="sprite"> {/** open peeps */}
+                <img src="https://avatars.dicebear.com/api/open-peeps/23.svg?background=%235bccf6" alt="an icon" />
               </div>
             </div>
 
@@ -135,7 +139,8 @@ function App() {
               </div>
             </div>
 
-            {adventurer.map(item => (
+            <div className="features">
+            {selectedSprite.map(item => (
               <div className="form-group" key={item.name}>
                 <label htmlFor={item.label}>{item.label}</label>
                 <select 
@@ -148,6 +153,7 @@ function App() {
                 </select>
               </div>
             ))}
+            </div>
           </div>
         </div>
       </div>
